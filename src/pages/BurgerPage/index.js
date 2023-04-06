@@ -1,10 +1,19 @@
 import React, { Component } from "react";
 import Burger from "../../components/Burger";
 import BuildControls from "../../components/BuildControls";
-import Modal from "../../components/general/modal";
+import Modal from "../../components/General/Modal"
+import OrderSummary from "../../components/OrderSummary";
 
 
 const INGREDIENT_PRICES = { salad: 150, cheese: 250, bacon: 800, meat: 1500 }
+
+
+const INGREDIENT_NAMES = {
+    bacon: "Гахайн мах",
+    cheese: "Бяслаг",
+    meat: "Үхрийн мах",
+    salad: "Салад"
+}
 
 class BurgerBuilder extends Component {
 
@@ -17,7 +26,20 @@ class BurgerBuilder extends Component {
         },
 
         totalPrice: 1000,
-        purchasing: false
+        purchasing: false,
+        confirmOrder: false
+    }
+
+    continueOrder = () => {
+        console.log("continue");
+    }
+
+    showConfirmModal = () => {
+        this.setState({ confirmOrder: true });
+    }
+
+    closeConfirmModal = () => {
+        this.setState({ confirmOrder: false });
     }
 
     ortsNemeh = (type) => {
@@ -50,9 +72,26 @@ class BurgerBuilder extends Component {
 
         return (
             <div>
-                <Modal />
+                <Modal
+                    closeConfirmModal={this.closeConfirmModal}
+                    show={this.state.confirmOrder}>
+                    <OrderSummary
+                        onCancel={this.closeConfirmModal}
+                        onContinue={this.continueOrder}
+                        totalPrice={this.state.totalPrice}
+                        ingredientsNames={INGREDIENT_NAMES}
+                        ingredients={this.state.ingredients} />
+                </Modal>
                 <Burger orts={this.state.ingredients} />
-                <BuildControls disabled={!this.state.purchasing} price={this.state.totalPrice} disabledIngredients={disabledIngredients} ortsHasah={this.ortsHasah} ortsNemeh={this.ortsNemeh} />
+                <BuildControls
+                    showConfirmModal={this.showConfirmModal}
+                    ingredientsNames={INGREDIENT_NAMES}
+                    disabled={!this.state.purchasing}
+                    price={this.state.totalPrice}
+                    disabledIngredients={disabledIngredients}
+                    ortsHasah={this.ortsHasah}
+                    ortsNemeh={this.ortsNemeh}
+                />
             </div>
         )
     }
