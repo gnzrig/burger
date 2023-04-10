@@ -1,19 +1,37 @@
-import css from './style.module.css';
-import React from 'react';
-import Toolbar from '../../components/Toolbar';
-import BurgerPage from '../BurgerPage'
-import SideBar from '../../components/SideBar';
+import React, { Component } from "react";
+import css from "./style.module.css";
 
-function App() {
-  return (
-    <div>
-      <Toolbar />
-      <SideBar />
-      <main className={css.Content}>
-        <BurgerPage />
-      </main>
-    </div>
-  );
+import Toolbar from "../../components/Toolbar";
+import BurgerPage from "../BurgerPage";
+import SideBar from "../../components/SideBar";
+import OrderPage from "../OrderPage";
+
+class App extends Component {
+  state = {
+    showSidebar: false
+  };
+
+  toggleSideBar = () => {
+    this.setState(prevState => {
+      return { showSidebar: !prevState.showSidebar };
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <Toolbar toggleSideBar={this.toggleSideBar} />
+        <SideBar
+          showSidebar={this.state.showSidebar}
+          toggleSideBar={this.toggleSideBar}
+        />
+        <main className={css.Content}>
+          {/* <BurgerPage /> */}
+          <OrderPage />
+        </main>
+      </div>
+    );
+  }
 }
 
 export default App;
